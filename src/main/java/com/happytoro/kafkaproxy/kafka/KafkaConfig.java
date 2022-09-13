@@ -26,6 +26,7 @@ public class KafkaConfig {
 
   @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
   KafkaStreamsConfiguration kStreamsConfig() {
+      System.out.println("call kStreamsConfig");
       Map<String, Object> props = new HashMap<>();
       props.put(APPLICATION_ID_CONFIG, "proxy-app");
       props.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
