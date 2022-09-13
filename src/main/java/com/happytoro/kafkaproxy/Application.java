@@ -18,6 +18,6 @@ public class Application {
 		producer.sendMessage("Hello, World!");
 
 		// shutdown
-		context.close();
+		//context.close();
   }
 }
