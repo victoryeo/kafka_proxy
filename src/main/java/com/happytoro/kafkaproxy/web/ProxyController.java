@@ -16,13 +16,14 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
+import com.happytoro.kafkaproxy.model.Order;
 
 @RestController
 @RequestMapping("/api/")
 public class ProxyController {
 	@Value("${spring.application.name}")
 	String appName;
-    
+
     Logger logger = LogManager.getLogger(RestController.class);
     private ApplicationContext context;
 
@@ -36,10 +37,11 @@ public class ProxyController {
     }
 
     @PostMapping("/order")
-    public String createOrder() {
+    public String createOrder(@RequestBody Order order) {
         logger.info("createOrder");
         MessageProducer producer = this.context.getBean(MessageProducer.class);
-		producer.sendMessage("Hello, Order!");
+        String orderStr = "Order " + order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity();
+		producer.sendMessage(orderStr);
         return "ok";
     }
 }
