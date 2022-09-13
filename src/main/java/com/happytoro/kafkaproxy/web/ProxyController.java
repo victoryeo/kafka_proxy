@@ -22,6 +22,7 @@ import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
 public class ProxyController {
 	@Value("${spring.application.name}")
 	String appName;
+    
     Logger logger = LogManager.getLogger(RestController.class);
     private ApplicationContext context;
 
@@ -36,7 +37,7 @@ public class ProxyController {
 
     @PostMapping("/order")
     public String createOrder() {
-        logger.info("ok");
+        logger.info("createOrder");
         MessageProducer producer = this.context.getBean(MessageProducer.class);
 		producer.sendMessage("Hello, Order!");
         return "ok";
