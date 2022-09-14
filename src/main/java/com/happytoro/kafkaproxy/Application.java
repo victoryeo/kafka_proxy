@@ -14,8 +14,8 @@ public class Application {
 
 		System.out.println("Kafka Proxy running");
 
-		MessageProducer producer = context.getBean(MessageProducer.class);
-		producer.sendMessage("Hello, World!");
+		/*MessageProducer producer = context.getBean(MessageProducer.class);
+		producer.sendMessage("Hello, World!");*/
 
 		// shutdown
 		//context.close();
