@@ -41,7 +41,8 @@ public class ProxyController {
     public ResponseEntity<String> createOrder(@RequestBody Order order) {
         logger.info("createOrder");
         MessageProducer producer = this.context.getBean(MessageProducer.class);
-        String orderStr = "Order " + order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity();
+        String orderStr = "Order " + order.getOrderType() + " " + order.getTokenType() +
+          order.getTokenName() + order.getPrice() + " " + order.getQuantity();
 		producer.sendMessage(orderStr);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
