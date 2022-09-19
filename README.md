@@ -9,14 +9,14 @@ written in spring boot, translate Rest API to Kafka stream
 2. Extract the zip file
 3. Rename the file to simple name e.g : kafka
 
-### Start zookeeper
+### Start zookeeper (Windows)
 
 ```
 cd kafka
 .\bin\windows\zookeeper-server-start.bat .\config\server.properties
 ```
 
-### Start Kafka broker
+### Start Kafka broker (Windows)
 ```
 .\bin\windows\kafka-server-start.bat .\config\server.properties
 ```
