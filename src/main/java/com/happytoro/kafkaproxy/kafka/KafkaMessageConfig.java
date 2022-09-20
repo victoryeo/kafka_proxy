@@ -13,6 +13,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class KafkaMessageConfig {
     @Bean
     public MessageProducer messageProducer() {
+        System.out.println("call messageProducer");
         return new MessageProducer();
     }
 
