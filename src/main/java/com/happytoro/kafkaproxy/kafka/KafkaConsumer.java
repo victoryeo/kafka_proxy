@@ -11,8 +11,8 @@ public class KafkaConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    @KafkaListener(topics = "TokenOrder",id = "myGroup")
+    @KafkaListener(topics = "TokenTrade",id = "myGroup")
     public void consume(String message){ 
-        LOGGER.info(String.format("Order received: %s ", message ));
+        LOGGER.info(String.format("Trade received: %s ", message ));
     }
 }
