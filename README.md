@@ -13,7 +13,7 @@ written in spring boot, translate Rest API to Kafka stream
 
 ```
 cd kafka
-.\bin\windows\zookeeper-server-start.bat .\config\server.properties
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
 ```
 
 ### Start Kafka broker (Windows)
