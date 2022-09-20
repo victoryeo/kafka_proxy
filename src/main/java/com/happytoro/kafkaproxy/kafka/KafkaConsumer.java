@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class KafkaConsumer {
-    private KafkaConsumer kafkaConsumer;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    @KafkaListener(topics = "TokenTrade",id = "myGroup")
+    @KafkaListener(topics = "#{'${message.topic.consumer_name}'}",id = "myGroup")
     public void consume(String message){ 
         LOGGER.info(String.format("Trade received: %s ", message ));
     }

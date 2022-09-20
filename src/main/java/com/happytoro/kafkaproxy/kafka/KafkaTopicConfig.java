@@ -16,7 +16,7 @@ public class KafkaTopicConfig {
     @Value(value = "${spring.kafka.bootstrapAddress}")
     private String bootstrapAddress;
 
-    @Value(value = "${message.topic.name}")
+    @Value(value = "${message.topic.producer_name}")
     private String topicName;
 
     @Bean

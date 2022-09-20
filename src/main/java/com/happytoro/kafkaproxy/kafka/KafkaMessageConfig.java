@@ -22,7 +22,7 @@ public class KafkaMessageConfig {
       @Autowired
       private KafkaTemplate<String, String> kafkaTemplate;
 
-      @Value(value = "${message.topic.name}")
+      @Value(value = "${message.topic.producer_name}")
       private String topicName;
 
       public void sendMessage(String message) {
