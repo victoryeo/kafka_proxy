@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class FirebaseMessagingService {
     private final FirebaseMessaging firebaseMessaging;
 
-    public FirebaseMessagingService() { this.firebaseMessaging = null; }
+    //public FirebaseMessagingService() { this.firebaseMessaging = null; }
     public FirebaseMessagingService(FirebaseMessaging firebaseMessaging) {
         this.firebaseMessaging = firebaseMessaging;
     }
