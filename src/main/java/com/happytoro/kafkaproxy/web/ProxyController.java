@@ -12,14 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import com.google.firebase.messaging.FirebaseMessagingException;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
 import com.happytoro.kafkaproxy.model.Order;
-import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
 
 @RestController
 @RequestMapping("/api/")
@@ -32,13 +30,6 @@ public class ProxyController {
 
     @Autowired
     public void context(ApplicationContext context) { this.context = context; }
-
-    @Autowired
-    private FirebaseMessagingService firebaseService;
-
-    public void sendPushMessage() throws FirebaseMessagingException {
-        firebaseService.sendNotification("Notification", "Text", "Receiver device token");
-    }
 
     @GetMapping("/appname")
     public ResponseEntity<String> appname() {
