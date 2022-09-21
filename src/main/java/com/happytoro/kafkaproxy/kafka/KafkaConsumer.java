@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
 
@@ -16,8 +18,11 @@ public class KafkaConsumer {
     @Autowired
     private FirebaseMessagingService firebaseService;
 
+    @Value(value = "${fcm.device.token}")
+    private String deviceToken;
+
     public void sendPushMessage(String msg) throws FirebaseMessagingException {
-        firebaseService.sendNotification("Notification", msg, "Receiver device token");
+        firebaseService.sendNotification("Notification", msg, deviceToken);
     }
 
     @KafkaListener(topics = "#{'${message.topic.consumer_name}'}",id = "myGroup")
