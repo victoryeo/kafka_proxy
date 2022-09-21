@@ -21,13 +21,13 @@ public class KafkaConsumer {
     @Value(value = "${fcm.device.token}")
     private String deviceToken;
 
-    public void sendPushMessage(String msg) throws FirebaseMessagingException {
-        firebaseService.sendNotification("Notification", msg, deviceToken);
+    public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
+        firebaseService.sendNotification(title, msg, deviceToken);
     }
 
     @KafkaListener(topics = "#{'${message.topic.consumer_name}'}",id = "myGroup")
     public void consume(String message) throws Exception{ 
         LOGGER.info(String.format("Trade received: %s ", message ));
-        sendPushMessage(message);
+        sendPushMessage("Trade matched", message);
     }
 }
