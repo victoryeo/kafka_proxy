@@ -9,11 +9,16 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
+import com.happytoro.kafkaproxy.repository.PriceRepository;
+import com.happytoro.kafkaproxy.model.Price;
 
 @Service
 public class KafkaConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
+
+    @Autowired
+    private PriceRepository priceRepository;
 
     @Autowired
     private FirebaseMessagingService firebaseService;
@@ -29,5 +34,11 @@ public class KafkaConsumer {
     public void consume(String message) throws Exception{ 
         LOGGER.info(String.format("Trade received: %s ", message ));
         sendPushMessage("Trade matched", message);
+
+        String[] pricearray = message.split(" ");
+        String timestampTrade = pricearray[5] + " " + pricearray[6];
+        Price price = new Price(pricearray[1], pricearray[2], Integer.parseInt(pricearray[3]), timestampTrade);
+        System.out.println(price);
+        priceRepository.save(price);
     }
 }
