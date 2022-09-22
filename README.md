@@ -33,6 +33,10 @@ Buy order
 ```
 curl -X POST -H "Content-Type: application/json" -X POST -d '{"tokenType":"stock", "tokenName":"AAPL","orderType":1,"price":10, "quantity":60}' http://localhost:8081/api/order
 ```
+Get price list of all tokens
+```
+curl -X GET http://localhost:8081/price/pricelist
+```
 ## maven command
 #### to run
 ./mvnw spring-boot:run
