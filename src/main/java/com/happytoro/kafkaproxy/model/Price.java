@@ -17,7 +17,7 @@ public class Price {
     name = "native",
     strategy = "native"
   )
-  private long id;
+  private Integer id;
 
   private String tokenType;
   private String tokenName;
