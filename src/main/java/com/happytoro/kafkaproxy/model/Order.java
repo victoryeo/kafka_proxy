@@ -8,5 +8,5 @@ public class Order {
   private String tokenName;
   private int orderType;
   private int price;
-  private int quantity;
+  private float quantity;
 }
