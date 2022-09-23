@@ -21,7 +21,7 @@ public class Price {
 
   private String tokenType;
   private String tokenName;
-  private int price;
+  private float price;
   private String timeOfTrade;
 
   public Price() {}
