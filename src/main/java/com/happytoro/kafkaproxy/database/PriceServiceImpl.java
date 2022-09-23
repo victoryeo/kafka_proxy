@@ -24,6 +24,10 @@ public class PriceServiceImpl
     public List<Price> fetchPriceList() {
       return (List<Price>)priceRepository.findAll();
     }
+
+    public Price getPricebyId(Integer id) {
+      return priceRepository.findById(id).get();
+    }
   
     @Override
     public void deletePriceById(Integer id)

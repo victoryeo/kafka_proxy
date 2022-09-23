@@ -35,7 +35,7 @@ curl -X POST -H "Content-Type: application/json" -X POST -d '{"tokenType":"stock
 ```
 Get price list of all tokens
 ```
-curl -X GET http://localhost:8081/price/pricelist
+curl -X GET http://localhost:8081/price/list
 ```
 ## maven command
 #### to run

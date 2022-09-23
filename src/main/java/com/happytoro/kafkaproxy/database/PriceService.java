@@ -13,6 +13,9 @@ public interface PriceService {
     // Read operation
     List<Price> fetchPriceList();
   
+    // Get operation
+    Price getPricebyId(Integer id);
+
     // Delete operation
     void deletePriceById(Integer id);
 }
