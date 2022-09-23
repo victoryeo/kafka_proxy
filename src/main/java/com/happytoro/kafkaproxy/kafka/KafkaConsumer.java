@@ -35,7 +35,7 @@ public class KafkaConsumer {
 
         String[] pricearray = message.split(" ");
         String timestampTrade = pricearray[5] + " " + pricearray[6];
-        Price price = new Price(pricearray[1], pricearray[2], Integer.parseInt(pricearray[3]), timestampTrade);
+        Price price = new Price(pricearray[1], pricearray[2], Float.parseFloat(pricearray[3]), timestampTrade);
         System.out.println(price);
         priceService.savePrice(price);
 
