@@ -14,7 +14,10 @@ public interface PriceService {
     List<Price> fetchPriceList();
   
     // Get operation
-    Price getPricebyId(Integer id);
+    Price getPriceById(Integer id);
+
+    // Get operation
+    List<Price> getPriceByTokenName(String name);
 
     // Delete operation
     void deletePriceById(Integer id);

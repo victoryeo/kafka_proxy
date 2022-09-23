@@ -25,8 +25,13 @@ public class PriceServiceImpl
       return (List<Price>)priceRepository.findAll();
     }
 
-    public Price getPricebyId(Integer id) {
+    public Price getPriceById(Integer id) {
       return priceRepository.findById(id).get();
+    }
+
+    // Get operation
+    public List<Price> getPriceByTokenName(String name) {
+      return priceRepository.findByNameEquals(name);
     }
   
     @Override

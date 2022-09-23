@@ -29,6 +29,12 @@ public class PriceController {
   @GetMapping("/{id}")
   public Price getPriceById(@PathVariable("id") Integer id) {
       logger.info("getPriceById");
-      return priceService.getPricebyId(id);
+      return priceService.getPriceById(id);
+  }
+
+  @GetMapping("/token/{name}")
+  public List<Price> getPriceByTokenName(@PathVariable("name") String name) {
+      logger.info("getPriceByTokenName");
+      return priceService.getPriceByTokenName(name);
   }
 }

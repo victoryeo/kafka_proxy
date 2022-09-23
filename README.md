@@ -37,6 +37,14 @@ Get price list of all tokens
 ```
 curl -X GET http://localhost:8081/price/list
 ```
+Get price by rtoken name
+```
+curl -X GET http://localhost:8080/price/token/AAPL
+```
+get price by id
+```
+curl -X GET http://localhost:8080/price/1
+```
 ## maven command
 #### to run
 ./mvnw spring-boot:run
