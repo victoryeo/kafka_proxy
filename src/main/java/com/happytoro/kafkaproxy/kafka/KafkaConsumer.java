@@ -32,12 +32,13 @@ public class KafkaConsumer {
     @KafkaListener(topics = "#{'${message.topic.consumer_name}'}",id = "myGroup")
     public void consume(String message) throws Exception{ 
         LOGGER.info(String.format("Trade received: %s ", message ));
-        sendPushMessage("Trade matched", message);
 
         String[] pricearray = message.split(" ");
         String timestampTrade = pricearray[5] + " " + pricearray[6];
         Price price = new Price(pricearray[1], pricearray[2], Integer.parseInt(pricearray[3]), timestampTrade);
         System.out.println(price);
         priceService.savePrice(price);
+
+        sendPushMessage("Trade matched", message);
     }
 }
