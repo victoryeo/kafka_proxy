@@ -37,7 +37,7 @@ Get price list of all tokens
 ```
 curl -X GET http://localhost:8081/price/list
 ```
-Get price by rtoken name
+Get price by token name
 ```
 curl -X GET http://localhost:8080/price/token/AAPL
 ```
