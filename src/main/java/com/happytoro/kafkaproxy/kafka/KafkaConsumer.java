@@ -15,7 +15,7 @@ import com.happytoro.kafkaproxy.model.Price;
 @Service
 public class KafkaConsumer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
 
     @Autowired private PriceService priceService;
   
@@ -31,7 +31,7 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "#{'${message.topic.consumer_name}'}",id = "myGroup")
     public void consume(String message) throws Exception{ 
-        LOGGER.info(String.format("Trade received: %s ", message ));
+        logger.info(String.format("Trade received: %s ", message ));
 
         String[] pricearray = message.split(" ");
         String timestampTrade = pricearray[5] + " " + pricearray[6];
