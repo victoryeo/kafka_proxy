@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
 import com.happytoro.kafkaproxy.model.Order;
+import com.happytoro.kafkaproxy.model.OrderItem;
 
 @RestController
 @RequestMapping("/api/")
@@ -43,7 +44,11 @@ public class ProxyController {
           order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity() +
           order.getOrderID();
         logger.info("Received "+ orderStr);
-		producer.sendMessage(orderStr);
+
+        OrderItem orderItem = new OrderItem(order.getOrderID(), order.getTokenType(),
+          order.getTokenName(), order.getOrderType(),
+          order.getPrice(), order.getQuantity());
+        producer.sendOrderMessage(orderItem);
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 }
