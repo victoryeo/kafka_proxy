@@ -9,13 +9,16 @@ import javax.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity
+@Entity  
 @Data
 @Table(name = "price")
-public class Price {
+public class Price {    
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-  @GenericGenerator(name = "native", strategy = "native")
+  @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+  @GenericGenerator(
+    name = "native",
+    strategy = "native"
+  )
   private Integer id;
 
   private String tokenType;
@@ -23,13 +26,12 @@ public class Price {
   private float price;
   private String timeOfTrade;
 
-  public Price() {
-  }
+  public Price() {}
 
   public Price(String type, String name, float price, String time) {
-    this.tokenType = type;
-    this.tokenName = name;
-    this.price = price;
-    this.timeOfTrade = time;
+      this.tokenType = type;
+      this.tokenName = name;
+      this.price = price;
+      this.timeOfTrade = time;
   }
 }
