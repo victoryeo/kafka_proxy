@@ -21,12 +21,12 @@ public class Price {
 
   private String tokenType;
   private String tokenName;
-  private int price;
+  private float price;
   private String timeOfTrade;
 
   public Price() {}
 
-  public Price(String type, String name, int price, String time) {
+  public Price(String type, String name, float price, String time) {
       this.tokenType = type;
       this.tokenName = name;
       this.price = price;
