@@ -40,7 +40,7 @@ public class ProxyController {
         MessageProducer producer = this.context.getBean(MessageProducer.class);
         String orderStr = "Order " +
           order.getTokenType() + " " + order.getTokenName() + " " +
-          order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity() +
+          order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity() + " " +
           order.getOrderID();
         logger.info("Received "+ orderStr);
 		producer.sendMessage(orderStr);
