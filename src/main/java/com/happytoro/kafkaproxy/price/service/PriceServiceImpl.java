@@ -1,4 +1,4 @@
-package com.happytoro.kafkaproxy.price.database;
+package com.happytoro.kafkaproxy.price.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

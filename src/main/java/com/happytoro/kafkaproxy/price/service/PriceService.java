@@ -1,4 +1,4 @@
-package com.happytoro.kafkaproxy.price.database;
+package com.happytoro.kafkaproxy.price.service;
 
 // Importing required classes
 import java.util.List;
