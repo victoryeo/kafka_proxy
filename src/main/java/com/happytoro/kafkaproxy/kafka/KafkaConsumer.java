@@ -36,10 +36,8 @@ public class KafkaConsumer {
 	public void consume(String message) throws Exception {
     logger.info(String.format("Trade received: %s ", message ));
 
-    String[] pricearray = message.split(" ");
-    System.out.println(Arrays.toString(pricearray));
     ObjectMapper mapper = new ObjectMapper();
-    JsonNode rootNode = mapper.readTree(pricearray[0]);
+    JsonNode rootNode = mapper.readTree(message);
 
     String timestampTrade = rootNode.get("timestamp").asText();
     Price price = new Price(
