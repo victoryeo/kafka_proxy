@@ -48,8 +48,8 @@ public class KafkaConsumer {
       rootNode.get("tokenName").asText(), 
       Float.parseFloat(rootNode.get("price").asText()),
       timestampTrade);
-    System.out.println(price);
-    priceService.savePrice(price);
+    Price savedPrice = priceService.savePrice(price);
+    System.out.println(savedPrice);
 
     openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
 
