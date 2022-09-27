@@ -1,4 +1,4 @@
-package com.happytoro.kafkaproxy.model;
+package com.happytoro.kafkaproxy.price.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

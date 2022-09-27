@@ -10,8 +10,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
-import com.happytoro.kafkaproxy.database.PriceService;
-import com.happytoro.kafkaproxy.model.Price;
+import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
+import com.happytoro.kafkaproxy.price.service.PriceService;
+import com.happytoro.kafkaproxy.price.model.Price;
 
 
 @Component
@@ -23,6 +24,9 @@ public class KafkaConsumer {
   
   //@Autowired
   //private FirebaseMessagingService firebaseService;
+
+  @Autowired
+  private OpenOrderService openOrderService;
 
   @Value(value = "${fcm.device.token}")
   private String deviceToken;
@@ -47,6 +51,9 @@ public class KafkaConsumer {
     System.out.println(price);
     priceService.savePrice(price);
 
+    openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
+
     //sendPushMessage("Trade matched", message);
 	}
 }
+
