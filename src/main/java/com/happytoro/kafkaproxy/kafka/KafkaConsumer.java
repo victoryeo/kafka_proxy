@@ -51,7 +51,14 @@ public class KafkaConsumer {
     Price savedPrice = priceService.savePrice(price);
     System.out.println(savedPrice);
 
-    openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
+    String makerOrderID = rootNode.get("makerOrderID").asText();
+    String takerOrderID = rootNode.get("takerOrderID").asText();
+    if (makerOrderID.equals(takerOrderID)) {
+      logger.info("makerOrderID is same as takerOrderID!");
+    }
+    else {
+      openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
+    }
 
     //sendPushMessage("Trade matched", message);
 	}
