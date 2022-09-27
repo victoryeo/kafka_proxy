@@ -7,5 +7,5 @@ import com.happytoro.kafkaproxy.openOrders.model.OpenOrder;
 
 @Repository
 public interface OpenOrderRepository extends JpaRepository<OpenOrder, Integer>{
-    OpenOrder findByOrderId(Long orderId);
+    OpenOrder findByOrderId(String orderId);
 }

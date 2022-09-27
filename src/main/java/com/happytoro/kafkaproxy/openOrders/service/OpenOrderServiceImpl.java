@@ -19,16 +19,16 @@ public class OpenOrderServiceImpl implements OpenOrderService{
     }
 
     @Override
-    public void updateOpenOrder(Long makerOrderID, Long takerOrderID, float amount) {
+    public void updateOpenOrder(String makerOrderID, String takerOrderID, float amount) {
         // update maker order id
         OpenOrder makerOpenOrder = openOrderRepository.findByOrderId(makerOrderID);
 
         // check if order will be fulfilled, delete if yes.
-        if (makerOpenOrder.getOpenAmount() + amount == makerOpenOrder.getInitialAmount()) {
+        if (makerOpenOrder.getOpenAmount() - amount <= 0) {
             this.deleteOpenOrder(makerOrderID);
         }
         else {
-            makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() + amount);
+            makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() - amount);
             openOrderRepository.save(makerOpenOrder);
         }
 
@@ -36,18 +36,18 @@ public class OpenOrderServiceImpl implements OpenOrderService{
         OpenOrder takerOpenOrder = openOrderRepository.findByOrderId(takerOrderID);
 
         // check if order will be fulfilled, delete if yes.
-        if (takerOpenOrder.getOpenAmount() + amount == takerOpenOrder.getInitialAmount()) {
-            this.deleteOpenOrder(makerOrderID);
+        if (takerOpenOrder.getOpenAmount() - amount <= 0) {
+            this.deleteOpenOrder(takerOrderID);
         }
         else {
-            takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() + amount);
+            takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() - amount);
             openOrderRepository.save(takerOpenOrder);
         }
 
 
     }
 
-    public void deleteOpenOrder(Long orderID) {
+    public void deleteOpenOrder(String orderID) {
         OpenOrder openOrder = openOrderRepository.findByOrderId(orderID);
         openOrderRepository.delete(openOrder);
     }

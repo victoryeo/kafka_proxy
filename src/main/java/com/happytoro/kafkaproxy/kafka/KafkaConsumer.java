@@ -51,7 +51,7 @@ public class KafkaConsumer {
     System.out.println(price);
     priceService.savePrice(price);
 
-    // openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asLong(), rootNode.get("takerOrderID").asLong(), rootNode.get("quantity").asLong());
+    openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
 
     //sendPushMessage("Trade matched", message);
 	}

@@ -22,7 +22,7 @@ public class OpenOrder {
     )
     private Integer id;
 
-    private Long orderId;
+    private String orderId;
     private String tokenType;
     private String tokenName;
     private float initialAmount;
@@ -31,7 +31,7 @@ public class OpenOrder {
 
     public OpenOrder() {}
 
-    public OpenOrder(Long orderId, String tokenType, String tokenName, float initialAmount, float openAmount, Integer orderType) {
+    public OpenOrder(String orderId, String tokenType, String tokenName, float initialAmount, float openAmount, Integer orderType) {
         this.orderId = orderId;
         this.tokenType = tokenType;
         this.tokenName = tokenName;
