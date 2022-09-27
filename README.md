@@ -27,11 +27,11 @@ curl -X GET http://localhost:8081/api/appname
 ```
 Sell order
 ```
-curl -X POST -H "Content-Type: application/json" -X POST -d '{"tokenType":"stock", "tokenName":"AAPL","orderType":0,"price":10, "quantity":60}' http://localhost:8081/api/order
+curl -X POST -H "Content-Type: application/json" -X POST -d '{"orderID":"1", "tokenType":"stock", "tokenName":"AAPL","orderType":0,"price":10, "quantity":60}' http://localhost:8081/api/order
 ```
 Buy order
 ```
-curl -X POST -H "Content-Type: application/json" -X POST -d '{"tokenType":"stock", "tokenName":"AAPL","orderType":1,"price":10, "quantity":60}' http://localhost:8081/api/order
+curl -X POST -H "Content-Type: application/json" -X POST -d '{"orderID":"2", "tokenType":"stock", "tokenName":"AAPL","orderType":1,"price":10, "quantity":60}' http://localhost:8081/api/order
 ```
 Get price list of all tokens
 ```
