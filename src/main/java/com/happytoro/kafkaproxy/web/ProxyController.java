@@ -17,6 +17,8 @@ import org.apache.logging.log4j.LogManager;
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
 import com.happytoro.kafkaproxy.model.Order;
 import com.happytoro.kafkaproxy.model.OrderItem;
+import com.happytoro.kafkaproxy.openOrders.model.OpenOrder;
+import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 
 @RestController
 @RequestMapping("/api/")
@@ -29,6 +31,9 @@ public class ProxyController {
 
     @Autowired
     public void context(ApplicationContext context) { this.context = context; }
+
+    @Autowired
+    private OpenOrderService openOrderService;
 
     @GetMapping("/appname")
     public ResponseEntity<String> appname() {
@@ -49,6 +54,10 @@ public class ProxyController {
           order.getTokenName(), order.getOrderType(),
           order.getPrice(), order.getQuantity());
         producer.sendOrderMessage(orderItem);
+
+        OpenOrder openOrder = new OpenOrder(order.getOrderID(), order.getTokenType(), order.getTokenName(), order.getQuantity(), order.getQuantity(), order.getOrderType());
+        openOrderService.saveOpenOrder(openOrder);
+        
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
+import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 import com.happytoro.kafkaproxy.price.model.Price;
 import com.happytoro.kafkaproxy.price.service.PriceService;
 
@@ -22,6 +23,9 @@ public class KafkaConsumer {
     @Autowired
     private FirebaseMessagingService firebaseService;
 
+    @Autowired
+    private OpenOrderService openOrderService;
+
     @Value(value = "${fcm.device.token}")
     private String deviceToken;
 
@@ -34,10 +38,20 @@ public class KafkaConsumer {
         logger.info(String.format("Trade received: %s ", message ));
 
         String[] pricearray = message.split(" ");
+
         String timestampTrade = pricearray[5] + " " + pricearray[6];
-        Price price = new Price(pricearray[1], pricearray[2], Float.parseFloat(pricearray[3]), timestampTrade);
-        System.out.println(price);
-        priceService.savePrice(price);
+        String tokenType = pricearray[1];
+        String tokenName = pricearray[2];
+        float price = Float.parseFloat(pricearray[3]);
+        float amount = Float.parseFloat(pricearray[4]);
+        Long takerOrderID = Long.parseLong(pricearray[10]);
+        Long makerOrderID = Long.parseLong(pricearray[11]);
+
+        Price newPrice = new Price(tokenType, tokenName, price, timestampTrade);
+        System.out.println(newPrice);
+        priceService.savePrice(newPrice);
+
+        openOrderService.updateOpenOrder(makerOrderID, takerOrderID, amount);
 
         sendPushMessage("Trade matched", message);
     }

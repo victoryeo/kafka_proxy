@@ -22,21 +22,21 @@ public class OpenOrder {
     )
     private Integer id;
 
-    private String orderId;
+    private Long orderId;
     private String tokenType;
     private String tokenName;
-    private String tokenSymbol;
     private float initialAmount;
     private float openAmount;
+    private Integer orderType;
 
     public OpenOrder() {}
 
-    public OpenOrder(String orderId, String tokenType, String tokenName, String tokenSymbol, Integer initialAmount, Integer openAmount) {
+    public OpenOrder(Long orderId, String tokenType, String tokenName, float initialAmount, float openAmount, Integer orderType) {
         this.orderId = orderId;
         this.tokenType = tokenType;
         this.tokenName = tokenName;
-        this.tokenSymbol = tokenSymbol;
         this.initialAmount = initialAmount;
         this.openAmount = openAmount;
+        this.orderType = orderType;
     }
 }
