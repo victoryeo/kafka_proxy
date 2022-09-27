@@ -23,7 +23,10 @@ public class KafkaConsumer {
   private PriceService priceService;
   
   //@Autowired
-  //private FirebaseMessagingService firebaseService;
+  private FirebaseMessagingService firebaseService;
+  KafkaConsumer(FirebaseMessagingService firebaseService) {
+    this.firebaseService = firebaseService;
+  }
 
   @Autowired
   private OpenOrderService openOrderService;
@@ -31,9 +34,9 @@ public class KafkaConsumer {
   @Value(value = "${fcm.device.token}")
   private String deviceToken;
 
-  /*public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
+  public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
       firebaseService.sendNotification(title, msg, deviceToken);
-  }*/
+  }
 
 	@KafkaListener(topics = "#{'${message.topic.consumer_name}'}", groupId = "myGroup")
 	public void consume(String message) throws Exception {
@@ -60,7 +63,7 @@ public class KafkaConsumer {
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
     }
 
-    //sendPushMessage("Trade matched", message);
+    sendPushMessage("Trade matched", message);
 	}
 }
 
