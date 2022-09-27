@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
-import com.happytoro.kafkaproxy.database.PriceService;
-import com.happytoro.kafkaproxy.model.Price;
+import com.happytoro.kafkaproxy.price.database.PriceService;
+import com.happytoro.kafkaproxy.price.model.Price;
 
 @Service
 public class KafkaConsumer {

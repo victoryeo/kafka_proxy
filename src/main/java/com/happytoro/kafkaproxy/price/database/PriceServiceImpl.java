@@ -1,11 +1,11 @@
-package com.happytoro.kafkaproxy.database;
+package com.happytoro.kafkaproxy.price.database;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.happytoro.kafkaproxy.repository.PriceRepository;
-import com.happytoro.kafkaproxy.model.Price;
+import com.happytoro.kafkaproxy.price.model.Price;
+import com.happytoro.kafkaproxy.price.repository.PriceRepository;
 
 @Service
 public class PriceServiceImpl

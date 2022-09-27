@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import java.util.List;
 
-import com.happytoro.kafkaproxy.model.Price;
-import com.happytoro.kafkaproxy.database.PriceService;
+import com.happytoro.kafkaproxy.price.database.PriceService;
+import com.happytoro.kafkaproxy.price.model.Price;
 
 @RestController
 @RequestMapping("/price/")
