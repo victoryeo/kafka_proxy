@@ -37,13 +37,32 @@ public class KafkaConsumerConfig {
 		return new DefaultKafkaConsumerFactory<>(config);
 	}
 
+  @Bean
+	public ConsumerFactory<String, String> consumerOrderFactory()
+	{
+		// Creating a Map of string-object pairs
+		Map<String, Object> config = new HashMap<>();
+
+		// Adding the Configuration
+		config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+		config.put(ConsumerConfig.GROUP_ID_CONFIG, "myGroup");
+		config.put(
+			ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+			"org.apache.kafka.common.serialization.StringDeserializer");
+		config.put(
+			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+			"org.springframework.kafka.support.serializer.JsonDeserializer");
+
+		return new DefaultKafkaConsumerFactory<>(config);
+	}
+
 	// Creating a Listener
 	public ConcurrentKafkaListenerContainerFactory concurrentKafkaListenerContainerFactory()
 	{
 		ConcurrentKafkaListenerContainerFactory<
 			String, String> factory
 			= new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory());
+		factory.setConsumerFactory(consumerOrderFactory());
 		return factory;
 	}
 }
