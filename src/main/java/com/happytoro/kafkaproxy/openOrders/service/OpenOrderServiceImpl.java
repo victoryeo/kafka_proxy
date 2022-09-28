@@ -8,7 +8,6 @@ import com.happytoro.kafkaproxy.openOrders.repository.OpenOrderRepository;
 
 @Service
 public class OpenOrderServiceImpl implements OpenOrderService{
-    
     @Autowired
     private OpenOrderRepository openOrderRepository;
 
@@ -20,31 +19,33 @@ public class OpenOrderServiceImpl implements OpenOrderService{
 
     @Override
     public void updateOpenOrder(String makerOrderID, String takerOrderID, float amount) {
-        // update maker order id
-        OpenOrder makerOpenOrder = openOrderRepository.findByOrderId(makerOrderID);
+        if (makerOrderID != "") {
+            // update maker order id
+            OpenOrder makerOpenOrder = openOrderRepository.findByOrderId(makerOrderID);
 
-        // check if order will be fulfilled, delete if yes.
-        if (makerOpenOrder.getOpenAmount() - amount <= 0) {
-            this.deleteOpenOrder(makerOrderID);
+            // check if order will be fulfilled, delete if yes.
+            if (makerOpenOrder.getOpenAmount() - amount <= 0) {
+                this.deleteOpenOrder(makerOrderID);
+            }
+            else {
+                makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() - amount);
+                openOrderRepository.save(makerOpenOrder);
+            }
         }
-        else {
-            makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() - amount);
-            openOrderRepository.save(makerOpenOrder);
+        
+        if (takerOrderID != "") {
+            // update taker order id
+            OpenOrder takerOpenOrder = openOrderRepository.findByOrderId(takerOrderID);
+
+            // check if order will be fulfilled, delete if yes.
+            if (takerOpenOrder.getOpenAmount() - amount <= 0) {
+                this.deleteOpenOrder(takerOrderID);
+            }
+            else {
+                takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() - amount);
+                openOrderRepository.save(takerOpenOrder);
+            }
         }
-
-        // update taker order id
-        OpenOrder takerOpenOrder = openOrderRepository.findByOrderId(takerOrderID);
-
-        // check if order will be fulfilled, delete if yes.
-        if (takerOpenOrder.getOpenAmount() - amount <= 0) {
-            this.deleteOpenOrder(takerOrderID);
-        }
-        else {
-            takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() - amount);
-            openOrderRepository.save(takerOpenOrder);
-        }
-
-
     }
 
     public void deleteOpenOrder(String orderID) {
@@ -52,5 +53,10 @@ public class OpenOrderServiceImpl implements OpenOrderService{
         openOrderRepository.delete(openOrder);
     }
 
+    @Override
+    public OpenOrder getOpenOrder(String orderID) {
+        OpenOrder openOrder = openOrderRepository.findByOrderId(orderID);
+        return openOrder;
+    }
 
 }

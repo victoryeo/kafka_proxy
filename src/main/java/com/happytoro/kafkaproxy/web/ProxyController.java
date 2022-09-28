@@ -42,21 +42,35 @@ public class ProxyController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> createOrder(@RequestBody Order order) {
+    public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
         MessageProducer producer = this.context.getBean(MessageProducer.class);
+
+        // if there's an orderID and it's not unique, then throw error.
+        if(order.getOrderID() != null && openOrderService.getOpenOrder(order.getOrderID()) != null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("OrderID already exists.");
+        }
+
         String orderStr = "Order " +
           order.getTokenType() + " " + order.getTokenName() + " " +
           order.getOrderType() + " " + order.getPrice() + " " + order.getQuantity() + " " +
           order.getOrderID();
         logger.info("Received "+ orderStr);
-
+    
         OrderItem orderItem = new OrderItem(order.getOrderID(), order.getTokenType(),
           order.getTokenName(), order.getOrderType(),
           order.getPrice(), order.getQuantity());
         producer.sendOrderMessage(orderItem);
 
-        OpenOrder openOrder = new OpenOrder(order.getOrderID(), order.getTokenType(), order.getTokenName(), order.getQuantity(), order.getQuantity(), order.getOrderType());
-        openOrderService.saveOpenOrder(openOrder);
+        if (order.getOrderID() != null) {
+          OpenOrder openOrder = new OpenOrder(order.getOrderID(), 
+              order.getTokenType(), 
+              order.getTokenName(), 
+              order.getQuantity(), 
+              order.getQuantity(), 
+              order.getOrderType()
+            );
+          openOrderService.saveOpenOrder(openOrder);
+        }
         
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
