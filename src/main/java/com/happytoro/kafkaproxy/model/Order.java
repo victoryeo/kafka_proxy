@@ -8,6 +8,6 @@ public class Order {
   private String tokenType;
   private String tokenName;
   private int orderType;
-  private float price;
-  private float quantity;
+  private Double price;
+  private Double quantity;
 }

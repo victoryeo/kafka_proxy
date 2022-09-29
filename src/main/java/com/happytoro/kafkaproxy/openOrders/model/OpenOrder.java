@@ -25,13 +25,15 @@ public class OpenOrder {
     private String orderId;
     private String tokenType;
     private String tokenName;
-    private float initialAmount;
-    private float openAmount;
+    private Double initialAmount;
+    private Double openAmount;
     private Integer orderType;
+    // should attach array of fcm to userId in v2, so all devices will be notified.
+    // private String userId; 
 
     public OpenOrder() {}
 
-    public OpenOrder(String orderId, String tokenType, String tokenName, float initialAmount, float openAmount, Integer orderType) {
+    public OpenOrder(String orderId, String tokenType, String tokenName, Double initialAmount, Double openAmount, Integer orderType) {
         this.orderId = orderId;
         this.tokenType = tokenType;
         this.tokenName = tokenName;

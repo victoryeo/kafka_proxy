@@ -2,6 +2,9 @@ package com.happytoro.kafkaproxy.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+
+import java.text.Format;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +63,24 @@ public class KafkaConsumer {
       logger.info("makerOrderID is same as takerOrderID!");
     }
     else {
-      openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asLong());
+      logger.info("calling update");
+      openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
 
-    sendPushMessage("Trade matched", message);
+    // if there's an orderID, send notification to device based on orderStatus
+    // from orderId, get from DB
+    // if exists, calculate percentage and send notification
+    // if not exist, 100% completion
+
+    if (!makerOrderID.isEmpty()) {
+      Double completion = openOrderService.getOrderCompletion(makerOrderID);
+      sendPushMessage(String.format("Trade %s%% matched", completion), message);
+    }
+
+    if (!takerOrderID.isEmpty()) {
+      Double completion = openOrderService.getOrderCompletion(takerOrderID);
+      sendPushMessage(String.format("Trade %s%% matched", completion), message);
+    }
 	}
 }
 

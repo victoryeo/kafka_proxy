@@ -10,16 +10,16 @@ public class OrderItem {
   private String tokenType;
   private String tokenName;
   private int orderType;
-  private float price;
-  private float quantity;
+  private Double price;
+  private Double quantity;
 
   public OrderItem(
     String orderID, 
     String tokenType,
     String tokenName,
     int orderType,
-    float price,
-    float quantity) {
+    Double price,
+    Double quantity) {
       this.orderID = orderID;
       this.tokenType = tokenType;
       this.tokenName = tokenName;
