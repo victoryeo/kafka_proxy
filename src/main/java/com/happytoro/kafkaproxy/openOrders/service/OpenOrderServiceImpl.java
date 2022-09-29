@@ -18,7 +18,7 @@ public class OpenOrderServiceImpl implements OpenOrderService{
     }
 
     @Override
-    public void updateOpenOrder(String makerOrderID, String takerOrderID, float amount) {
+    public void updateOpenOrder(String makerOrderID, String takerOrderID, Double amount) {
         if (makerOrderID != "") {
             // update maker order id
             OpenOrder makerOpenOrder = openOrderRepository.findByOrderId(makerOrderID);
@@ -59,4 +59,17 @@ public class OpenOrderServiceImpl implements OpenOrderService{
         return openOrder;
     }
 
+    @Override
+    public Double getOrderCompletion(String orderID) {
+        OpenOrder openOrder = openOrderRepository.findByOrderId(orderID);
+
+        // percentage is calculated by 100 - openamount/initialamount*100
+        if (openOrder != null) {
+            Double openAmount = openOrder.getOpenAmount();
+            Double initialAmount = openOrder.getInitialAmount();
+            return (Double) (100 - (openAmount/initialAmount)*100);
+        }
+
+        return 100.00;
+    }
 }
