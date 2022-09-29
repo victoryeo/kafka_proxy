@@ -63,7 +63,6 @@ public class KafkaConsumer {
       logger.info("makerOrderID is same as takerOrderID!");
     }
     else {
-      logger.info("calling update");
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
 
