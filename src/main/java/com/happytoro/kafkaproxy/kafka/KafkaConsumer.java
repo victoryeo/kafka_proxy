@@ -17,7 +17,6 @@ import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 import com.happytoro.kafkaproxy.price.service.PriceService;
 import com.happytoro.kafkaproxy.price.model.Price;
 
-
 @Component
 public class KafkaConsumer {
   private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
@@ -69,16 +68,33 @@ public class KafkaConsumer {
     // if there's an orderID, send notification to device based on orderStatus
     // from orderId, get from DB
     // if exists, calculate percentage and send notification
-    // if not exist, 100% completion
+    // if not exist, 100% completion 
 
     if (!makerOrderID.isEmpty()) {
       Double completion = openOrderService.getOrderCompletion(makerOrderID);
-      sendPushMessage(String.format("Trade %s%% matched", completion), message);
+      String toSent = "{"
+        + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
+        + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
+        + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
+        + "\"price\":" + rootNode.get("price").asText() + ","
+        + "\"quantity\":" + rootNode.get("quantity").asText() + ","
+        + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
+        + "}";
+      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
     }
 
     if (!takerOrderID.isEmpty()) {
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
-      sendPushMessage(String.format("Trade %s%% matched", completion), message);
+      String toSent = "{"
+        + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
+        + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
+        + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
+        + "\"price\":" + rootNode.get("price").asText() + ","
+        + "\"quantity\":" + rootNode.get("quantity").asText() + ","
+        + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
+        + "}";
+      logger.info(toSent); 
+      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
     }
 	}
 }
