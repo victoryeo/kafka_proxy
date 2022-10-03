@@ -1,6 +1,7 @@
 package com.happytoro.kafkaproxy.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.Format;
@@ -9,10 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
+import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
+import com.happytoro.kafkaproxy.model.TradeMatch;
 import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 import com.happytoro.kafkaproxy.price.service.PriceService;
 import com.happytoro.kafkaproxy.price.model.Price;
@@ -20,9 +25,13 @@ import com.happytoro.kafkaproxy.price.model.Price;
 @Component
 public class KafkaConsumer {
   private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
-  
+  private ApplicationContext context;
+
   @Autowired 
   private PriceService priceService;
+
+  @Autowired
+  public void context(ApplicationContext context) { this.context = context; }
   
   //@Autowired
   private FirebaseMessagingService firebaseService;
@@ -42,6 +51,7 @@ public class KafkaConsumer {
 
 	@KafkaListener(topics = "#{'${message.topic.consumer_name}'}", groupId = "myGroup")
 	public void consume(String message) throws Exception {
+    MessageProducer producer = this.context.getBean(MessageProducer.class);
     logger.info(String.format("Trade received: %s ", message ));
 
     ObjectMapper mapper = new ObjectMapper();
@@ -64,6 +74,14 @@ public class KafkaConsumer {
     else {
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
+
+    TradeMatch tm = new TradeMatch(1, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+      rootNode.get("tokenType").asText(),
+      rootNode.get("tokenName").asText(),
+      Float.parseFloat(rootNode.get("price").asText()),
+      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+    
+    producer.sendTradeMessage(tm);
 
     // if there's an orderID, send notification to device based on orderStatus
     // from orderId, get from DB
