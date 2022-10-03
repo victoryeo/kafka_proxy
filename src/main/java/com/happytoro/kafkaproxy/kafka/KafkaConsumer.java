@@ -27,7 +27,7 @@ public class KafkaConsumer {
   private PriceService priceService;
 
   @Autowired
-  private KafkaTemplate<String, Object> kafkaTradeTemplate;
+  private KafkaTemplate<String, Object> kafkaOrderTemplate;
 
   @Value(value = "${message.topic.user_trade}")
   private String userTradeTopic;
@@ -79,7 +79,7 @@ public class KafkaConsumer {
       Float.parseFloat(rootNode.get("price").asText()),
       Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
 
-    kafkaTradeTemplate.send(userTradeTopic, tm);
+    kafkaOrderTemplate.send(userTradeTopic, tm);
 
     // if there's an orderID, send notification to device based on orderStatus
     // from orderId, get from DB

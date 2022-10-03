@@ -26,9 +26,6 @@ public class KafkaMessageConfig {
 
       @Autowired
       private KafkaTemplate<String, Object> kafkaOrderTemplate;
-
-      @Autowired
-      private KafkaTemplate<String, Object> kafkaTradeTemplate;
       
       @Value(value = "${message.topic.producer_name}")
       private String topicName;
@@ -71,7 +68,7 @@ public class KafkaMessageConfig {
 
       public void sendTradeMessage(TradeMatch message) {
         System.out.println(String.format("Order %s", message));
-        ListenableFuture<SendResult<String, Object>> future = kafkaTradeTemplate.send(topicName, message);
+        ListenableFuture<SendResult<String, Object>> future = kafkaOrderTemplate.send(topicName, message);
         future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
     
             @Override

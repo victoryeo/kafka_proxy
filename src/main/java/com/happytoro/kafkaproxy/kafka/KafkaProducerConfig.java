@@ -53,10 +53,4 @@ public class KafkaProducerConfig {
         System.out.println("call kafkaTemplate");
         return new KafkaTemplate<String, Object>(producerOrderFactory());
     }
-
-    @Bean
-    public KafkaTemplate<String, Object> kafkaTradeTemplate() {
-        System.out.println("call kafkaTradeTemplate");
-        return new KafkaTemplate<String, Object>(producerOrderFactory());
-    }
 }
