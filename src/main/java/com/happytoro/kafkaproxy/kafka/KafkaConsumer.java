@@ -1,6 +1,7 @@
 package com.happytoro.kafkaproxy.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.Format;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
+import com.happytoro.kafkaproxy.model.TradeMatch;
 import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 import com.happytoro.kafkaproxy.price.service.PriceService;
 import com.happytoro.kafkaproxy.price.model.Price;
@@ -23,6 +25,12 @@ public class KafkaConsumer {
   
   @Autowired 
   private PriceService priceService;
+
+  @Autowired
+  private KafkaTemplate<String, Object> kafkaTradeTemplate;
+
+  @Value(value = "${message.topic.user_trade}")
+  private String userTradeTopic;
   
   //@Autowired
   private FirebaseMessagingService firebaseService;
@@ -64,6 +72,14 @@ public class KafkaConsumer {
     else {
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
+
+    TradeMatch tm = new TradeMatch(1, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+      rootNode.get("tokenType").asText(),
+      rootNode.get("tokenName").asText(),
+      Float.parseFloat(rootNode.get("price").asText()),
+      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+
+    kafkaTradeTemplate.send(userTradeTopic, tm);
 
     // if there's an orderID, send notification to device based on orderStatus
     // from orderId, get from DB
