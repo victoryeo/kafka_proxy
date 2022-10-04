@@ -23,13 +23,15 @@ public class OpenOrderServiceImpl implements OpenOrderService{
             // update maker order id
             OpenOrder makerOpenOrder = openOrderRepository.findByOrderId(makerOrderID);
 
-            // check if order will be fulfilled, delete if yes.
-            if (makerOpenOrder.getOpenAmount() - amount <= 0) {
-                this.deleteOpenOrder(makerOrderID);
-            }
-            else {
-                makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() - amount);
-                openOrderRepository.save(makerOpenOrder);
+            if (makerOpenOrder != null) {
+                // check if order will be fulfilled, delete if yes.
+                if (makerOpenOrder.getOpenAmount() - amount <= 0) {
+                    this.deleteOpenOrder(makerOrderID);
+                }
+                else {
+                    makerOpenOrder.setOpenAmount(makerOpenOrder.getOpenAmount() - amount);
+                    openOrderRepository.save(makerOpenOrder);
+                }
             }
         }
         
@@ -37,13 +39,15 @@ public class OpenOrderServiceImpl implements OpenOrderService{
             // update taker order id
             OpenOrder takerOpenOrder = openOrderRepository.findByOrderId(takerOrderID);
 
+            if (takerOpenOrder != null) {
             // check if order will be fulfilled, delete if yes.
-            if (takerOpenOrder.getOpenAmount() - amount <= 0) {
-                this.deleteOpenOrder(takerOrderID);
-            }
-            else {
-                takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() - amount);
-                openOrderRepository.save(takerOpenOrder);
+                if (takerOpenOrder.getOpenAmount() - amount <= 0) {
+                    this.deleteOpenOrder(takerOrderID);
+                }
+                else {
+                    takerOpenOrder.setOpenAmount(takerOpenOrder.getOpenAmount() - amount);
+                    openOrderRepository.save(takerOpenOrder);
+                }
             }
         }
     }
