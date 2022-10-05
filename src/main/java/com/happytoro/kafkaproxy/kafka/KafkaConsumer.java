@@ -108,7 +108,7 @@ public class KafkaConsumer {
     if (!takerOrderID.isEmpty()) {
       String takerUID = "1";
       if (takerOrderID.contains("&uid")) {
-        takerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+        takerUID = takerOrderID.substring(takerOrderID.lastIndexOf("&uid") + 4);
       }
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
       String toSent = "{"
