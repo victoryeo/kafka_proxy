@@ -3,7 +3,6 @@ package com.happytoro.kafkaproxy.kafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.text.Format;
 
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.happytoro.kafkaproxy.firebase.FirebaseMessagingService;
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
-import com.happytoro.kafkaproxy.model.FCMToken;
 import com.happytoro.kafkaproxy.model.TradeMatch;
 import com.happytoro.kafkaproxy.openOrders.service.OpenOrderService;
 import com.happytoro.kafkaproxy.price.service.PriceService;
@@ -44,10 +42,10 @@ public class KafkaConsumer {
   @Autowired
   private OpenOrderService openOrderService;
 
-  // @Value(value = "${fcm.device.token}")
-  // private String deviceToken;
+  @Value(value = "${fcm.device.token}")
+  private String deviceToken;
 
-  public void sendPushMessage(String title, String msg, String deviceToken) throws FirebaseMessagingException {
+  public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
       firebaseService.sendNotification(title, msg, deviceToken);
   }
 
@@ -91,8 +89,7 @@ public class KafkaConsumer {
     // if not exist, 100% completion 
 
     if (!makerOrderID.isEmpty() && makerOrderID.contains("&uid")) {
-      String makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
-      String makerFCMToken = this.getFCMToken(makerUID);
+      // String makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
       Double completion = openOrderService.getOrderCompletion(makerOrderID);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
@@ -102,13 +99,12 @@ public class KafkaConsumer {
         + "\"quantity\":" + rootNode.get("quantity").asText() + ","
         + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
         + "}";
-      sendPushMessage(String.format("Trade %s%% matched", completion), toSent, makerFCMToken);
+      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
     }
 
     if (!takerOrderID.isEmpty() && takerOrderID.contains("&uid")) {
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
-      String takerUID = takerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
-      String takerFCMToken = this.getFCMToken(takerUID);
+      // String takerUID = takerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
         + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
@@ -118,24 +114,8 @@ public class KafkaConsumer {
         + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
         + "}";
       logger.info(toSent); 
-      sendPushMessage(String.format("Trade %s%% matched", completion), toSent, takerFCMToken);
+      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
     }
 	}
-
-  private String getFCMToken(String uid) {
-    String uri = "http://localhost:4001/userservice/fcmToken/" + uid;
-
-    System.out.println(uri);
-
-    RestTemplate restTemplate = new RestTemplate();
-    FCMToken result = restTemplate.getForObject(uri, FCMToken.class);
-
-    if (result != null) {
-      return result.getFcmToken();
-    }
-    else {
-      return null;    
-    }
-  }
 }
 
