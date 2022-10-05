@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @JsonSerialize
 public class TradeMatch {
-    private Integer userId;
+    private String userId;
     private Integer tradeID;
     private String takerOrderId;
     private String makerOrderId;
@@ -19,7 +19,7 @@ public class TradeMatch {
     private String timestamp;
 
     public TradeMatch(
-            Integer userId,
+            String userId,
             Integer tradeID,
             String takerOrderId,
             String makerOrderId,
