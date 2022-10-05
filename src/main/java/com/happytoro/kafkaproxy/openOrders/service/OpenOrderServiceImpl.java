@@ -76,4 +76,18 @@ public class OpenOrderServiceImpl implements OpenOrderService{
 
         return 100.00;
     }
+
+    @Override
+    public Integer getOrderType(String orderID) {
+        OpenOrder openOrder = openOrderRepository.findByOrderId(orderID);
+
+        if(openOrder != null) {
+            Integer orderType = openOrder.getOrderType();
+
+            System.out.println("HERADSDADS " + orderType);
+            return orderType;
+        }
+
+        return 99;
+    }
 }

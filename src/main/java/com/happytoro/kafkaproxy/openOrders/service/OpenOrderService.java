@@ -7,4 +7,5 @@ public interface OpenOrderService {
     void updateOpenOrder(String makerOrderID, String takerOrderID, Double amount);
     OpenOrder getOpenOrder(String orderId);
     Double getOrderCompletion(String orderId);
+    Integer getOrderType(String orderId);
 }
