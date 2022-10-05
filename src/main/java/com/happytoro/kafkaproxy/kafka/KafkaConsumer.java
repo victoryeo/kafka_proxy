@@ -68,10 +68,14 @@ public class KafkaConsumer {
 
     String makerOrderID = rootNode.get("makerOrderID").asText();
     String takerOrderID = rootNode.get("takerOrderID").asText();
+    Integer makerOrderType = 99;
+    Integer takerOrderType = 99;
     if (makerOrderID.equals(takerOrderID)) {
       logger.info("makerOrderID is same as takerOrderID!");
     }
     else {
+      makerOrderType = openOrderService.getOrderType(makerOrderID);
+      takerOrderType = openOrderService.getOrderType(takerOrderID);
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
 
@@ -86,12 +90,19 @@ public class KafkaConsumer {
         makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
       }
       Double completion = openOrderService.getOrderCompletion(makerOrderID);
+      String orderQuantity;
+      if (makerOrderType == 0) {
+        orderQuantity = String.valueOf(rootNode.get("quantity").asInt() * -1);
+      }
+      else {
+        orderQuantity = rootNode.get("quantity").asText();
+      }
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
         + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
         + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
-        + "\"price\":" + rootNode.get("price").asText() + ","
-        + "\"quantity\":" + rootNode.get("quantity").asText() + ","
+        + "\"price\":" + rootNode.get("price").asText()  + ","
+        + "\"quantity\":" + rootNode.get("quantity").asText()  + ","
         + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
         + "}";
       sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
@@ -100,7 +111,7 @@ public class KafkaConsumer {
       rootNode.get("tokenType").asText(),
       rootNode.get("tokenName").asText(),
       Float.parseFloat(rootNode.get("price").asText()),
-      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+      Float.parseFloat(orderQuantity), timestampTrade);
     
       producer.sendTradeMessage(tm);
     }
@@ -108,15 +119,22 @@ public class KafkaConsumer {
     if (!takerOrderID.isEmpty()) {
       String takerUID = "1";
       if (takerOrderID.contains("&uid")) {
-        takerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+        takerUID = takerOrderID.substring(takerOrderID.lastIndexOf("&uid") + 4);
       }
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
+      String orderQuantity;
+      if (takerOrderType == 0) {
+        orderQuantity = String.valueOf(rootNode.get("quantity").asDouble() * -1);
+      }
+      else {
+        orderQuantity = rootNode.get("quantity").asText();
+      }
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
         + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
         + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
         + "\"price\":" + rootNode.get("price").asText() + ","
-        + "\"quantity\":" + rootNode.get("quantity").asText() + ","
+        + "\"quantity\":" + orderQuantity + ","
         + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
         + "}";
       logger.info(toSent); 
@@ -126,7 +144,7 @@ public class KafkaConsumer {
       rootNode.get("tokenType").asText(),
       rootNode.get("tokenName").asText(),
       Float.parseFloat(rootNode.get("price").asText()),
-      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+      Float.parseFloat(orderQuantity), timestampTrade);
     
       producer.sendTradeMessage(tm);
     }
