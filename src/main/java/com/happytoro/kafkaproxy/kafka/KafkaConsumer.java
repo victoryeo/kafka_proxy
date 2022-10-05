@@ -75,20 +75,16 @@ public class KafkaConsumer {
       openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
     }
 
-    TradeMatch tm = new TradeMatch(1, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
-      rootNode.get("tokenType").asText(),
-      rootNode.get("tokenName").asText(),
-      Float.parseFloat(rootNode.get("price").asText()),
-      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
-    
-    producer.sendTradeMessage(tm);
-
     // if there's an orderID, send notification to device based on orderStatus
     // from orderId, get from DB
     // if exists, calculate percentage and send notification
     // if not exist, 100% completion 
 
     if (!makerOrderID.isEmpty()) {
+      String makerUID = "1";
+      if (makerOrderID.contains("&uid")) {
+        makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+      }
       Double completion = openOrderService.getOrderCompletion(makerOrderID);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
@@ -99,9 +95,21 @@ public class KafkaConsumer {
         + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
         + "}";
       sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
+
+      TradeMatch tm = new TradeMatch(makerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+      rootNode.get("tokenType").asText(),
+      rootNode.get("tokenName").asText(),
+      Float.parseFloat(rootNode.get("price").asText()),
+      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+    
+      producer.sendTradeMessage(tm);
     }
 
     if (!takerOrderID.isEmpty()) {
+      String takerUID = "1";
+      if (takerOrderID.contains("&uid")) {
+        takerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+      }
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
@@ -113,6 +121,14 @@ public class KafkaConsumer {
         + "}";
       logger.info(toSent); 
       sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
+
+      TradeMatch tm = new TradeMatch(takerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+      rootNode.get("tokenType").asText(),
+      rootNode.get("tokenName").asText(),
+      Float.parseFloat(rootNode.get("price").asText()),
+      Float.parseFloat(rootNode.get("quantity").asText()), timestampTrade);
+    
+      producer.sendTradeMessage(tm);
     }
 	}
 }
