@@ -80,8 +80,11 @@ public class KafkaConsumer {
     // if exists, calculate percentage and send notification
     // if not exist, 100% completion 
 
-    if (!makerOrderID.isEmpty() && makerOrderID.contains("&uid")) {
-      String makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+    if (!makerOrderID.isEmpty()) {
+      String makerUID = "1";
+      if (makerOrderID.contains("&uid")) {
+        makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+      }
       Double completion = openOrderService.getOrderCompletion(makerOrderID);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
@@ -102,9 +105,12 @@ public class KafkaConsumer {
       producer.sendTradeMessage(tm);
     }
 
-    if (!takerOrderID.isEmpty() && takerOrderID.contains("&uid")) {
+    if (!takerOrderID.isEmpty()) {
+      String takerUID = "1";
+      if (takerOrderID.contains("&uid")) {
+        takerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+      }
       Double completion = openOrderService.getOrderCompletion(takerOrderID);
-      String takerUID = takerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
       String toSent = "{"
         + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
         + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
