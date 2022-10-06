@@ -57,7 +57,7 @@ public class ProxyController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> createOrder(@RequestBody Order order) {
+    public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
         Map<String, String> bodyMap = new HashMap();
         bodyMap.put("access_token",order.getAccessToken());
 
