@@ -83,8 +83,6 @@ public class OpenOrderServiceImpl implements OpenOrderService{
 
         if(openOrder != null) {
             Integer orderType = openOrder.getOrderType();
-
-            System.out.println("HERADSDADS " + orderType);
             return orderType;
         }
 
