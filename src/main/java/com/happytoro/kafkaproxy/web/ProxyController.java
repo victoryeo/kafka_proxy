@@ -77,9 +77,16 @@ public class ProxyController {
 
           PayloadJWT pJwt = response.block();
           System.out.println(pJwt);
-          String email = pJwt.getEmail();
-          String iat = pJwt.getIat();
-          String exp = pJwt.getExp();
+          String email = null;
+          String iat = null;
+          String exp = null;
+          if (pJwt != null) {
+            email = pJwt.getEmail();
+            iat = pJwt.getIat();
+            exp = pJwt.getExp();
+          } else {
+            System.out.println("pJwt is null, invalid access token");
+          }
 
           if (email == null && iat == null && exp == null) {
             System.out.println("invalid access token");
