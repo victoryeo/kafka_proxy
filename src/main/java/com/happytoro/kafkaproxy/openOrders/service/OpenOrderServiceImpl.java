@@ -59,7 +59,13 @@ public class OpenOrderServiceImpl implements OpenOrderService{
 
     @Override
     public OpenOrder getOpenOrder(String orderID) {
-        OpenOrder openOrder = openOrderRepository.findByOrderId(orderID);
+        OpenOrder openOrder = null;
+        try {
+            openOrder = openOrderRepository.findByOrderId(orderID);
+        } catch (Exception err) {
+            System.out.println("getOpenOrder error");
+            System.out.println(err);
+        }
         return openOrder;
     }
 
