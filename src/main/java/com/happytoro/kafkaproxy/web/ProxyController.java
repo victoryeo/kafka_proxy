@@ -64,26 +64,31 @@ public class ProxyController {
     public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
         Map<String, String> bodyMap = new HashMap();
         String accessToken = request.getHeader("Access-Token");
-        System.out.println(accessToken);
-        bodyMap.put("access_token", accessToken);
+        if (accessToken != null ) {
+          System.out.println(accessToken);
+          bodyMap.put("access_token", accessToken);
 
-        Mono<PayloadJWT> response = createWebClient.post()
-                .uri("/userservice/validatetoken")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(BodyInserters.fromValue(bodyMap))
-                .retrieve()
-                .bodyToMono(PayloadJWT.class);
+          Mono<PayloadJWT> response = createWebClient.post()
+                  .uri("/userservice/validatetoken")
+                  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                  .body(BodyInserters.fromValue(bodyMap))
+                  .retrieve()
+                  .bodyToMono(PayloadJWT.class);
 
-        PayloadJWT pJwt = response.block();
-        System.out.println(pJwt);
-        String email = pJwt.getEmail();
-        String iat = pJwt.getIat();
-        String exp = pJwt.getExp();
+          PayloadJWT pJwt = response.block();
+          System.out.println(pJwt);
+          String email = pJwt.getEmail();
+          String iat = pJwt.getIat();
+          String exp = pJwt.getExp();
 
-        if (email == null && iat == null && exp == null) {
+          if (email == null && iat == null && exp == null) {
             System.out.println("invalid access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid access token");
+          }
         } else {
+          System.out.println("accessToken is null");
+        }
+        {
             MessageProducer producer = this.context.getBean(MessageProducer.class);
 
             // if there's an orderID and it's not unique, then throw error.
