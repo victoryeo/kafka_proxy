@@ -20,6 +20,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.logging.log4j.LogManager;
 
 import com.happytoro.kafkaproxy.kafka.KafkaMessageConfig.MessageProducer;
@@ -46,6 +48,8 @@ public class ProxyController {
     @Autowired
     private OpenOrderService openOrderService;
 
+    @Autowired
+	private HttpServletRequest request;
 
     @Autowired
     WebClient createWebClient;
@@ -59,7 +63,9 @@ public class ProxyController {
     @PostMapping("/order")
     public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
         Map<String, String> bodyMap = new HashMap();
-        bodyMap.put("access_token",order.getAccessToken());
+        String accessToken = request.getHeader("Access-Token");
+        System.out.println(accessToken);
+        bodyMap.put("access_token", accessToken);
 
         Mono<PayloadJWT> response = createWebClient.post()
                 .uri("/userservice/validatetoken")
