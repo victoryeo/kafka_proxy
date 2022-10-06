@@ -33,6 +33,12 @@ Buy order
 ```
 curl -X POST -H "Content-Type: application/json" -X POST -d '{"orderID":"2", "tokenType":"stock", "tokenName":"AAPL","orderType":1,"price":10, "quantity":60}' http://localhost:8081/api/order
 ```
+
+With access token 
+````
+curl -X POST -H "Content-Type: application/json" -H "Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4iLCJpYXQiOjE2NjUwMjA3OTYsImV4cCI6MTY2NTAyNDM5Nn0.iM5bea67KAE3WHHN-mNpip4ETKVeEbVYvMiEoZ6vA7c" -X POST -d '{"orderID":"3049", "tokenType":"bond", "tokenName":"AAPLE","orderType":0,"price":10, "quantity":60}' http://localhost:8081/api/order
+````
+
 Get price list of all tokens
 ```
 curl -X GET http://localhost:8081/price/list
