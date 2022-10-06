@@ -94,6 +94,7 @@ public class ProxyController {
           }
         } else {
           System.out.println("accessToken is null");
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Access token is null");
         }
         {
             MessageProducer producer = this.context.getBean(MessageProducer.class);
