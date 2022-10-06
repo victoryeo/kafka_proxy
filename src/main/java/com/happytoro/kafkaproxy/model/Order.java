@@ -10,4 +10,5 @@ public class Order {
   private int orderType;
   private Double price;
   private Double quantity;
+  private String accessToken;
 }
