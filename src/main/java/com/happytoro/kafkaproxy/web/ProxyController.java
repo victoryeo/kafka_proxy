@@ -78,6 +78,9 @@ public class ProxyController {
           Mono<ResponseEntity<PayloadJWT>> resp2 = respSpec.toEntity(PayloadJWT.class);
 
           ResponseEntity<String> strResp = resp1.block();
+          // print the whole response entity
+          System.out.println(strResp);
+          
           String respBody = strResp.getBody();
           System.out.println(respBody);
           ResponseEntity<PayloadJWT> pJwtResp = resp2.block();
@@ -99,7 +102,7 @@ public class ProxyController {
             System.out.println("expired access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Expired access token");
           }
-          if (email == null && iat == null && exp == null) {
+          else if (email == null && iat == null && exp == null) {
             System.out.println("invalid access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid access token");
           }
