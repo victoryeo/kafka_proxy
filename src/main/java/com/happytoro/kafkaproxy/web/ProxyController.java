@@ -3,6 +3,7 @@ package com.happytoro.kafkaproxy.web;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,19 +69,25 @@ public class ProxyController {
           System.out.println(accessToken);
           bodyMap.put("access_token", accessToken);
 
-          Mono<PayloadJWT> response = createWebClient.post()
+          ResponseSpec respSpec = createWebClient.post()
                   .uri("/userservice/validatetoken")
-                  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                   .body(BodyInserters.fromValue(bodyMap))
-                  .retrieve()
-                  .bodyToMono(PayloadJWT.class);
+                  .retrieve();
+                  
+          Mono<ResponseEntity<String>> resp1 = respSpec.toEntity(String.class);
+          Mono<ResponseEntity<PayloadJWT>> resp2 = respSpec.toEntity(PayloadJWT.class);
 
-          PayloadJWT pJwt = response.block();
+          ResponseEntity<String> strResp = resp1.block();
+          String respBody = strResp.getBody();
+          System.out.println(respBody);
+          ResponseEntity<PayloadJWT> pJwtResp = resp2.block();
+          PayloadJWT pJwt = pJwtResp.getBody();
           System.out.println(pJwt);
           String email = null;
           String iat = null;
           String exp = null;
           if (pJwt != null) {
+            System.out.println("pJwt is  NOT null");
             email = pJwt.getEmail();
             iat = pJwt.getIat();
             exp = pJwt.getExp();
@@ -88,6 +95,10 @@ public class ProxyController {
             System.out.println("pJwt is null, invalid access token");
           }
 
+          if (respBody.contains("expired")) {
+            System.out.println("expired access token");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Expired access token");
+          }
           if (email == null && iat == null && exp == null) {
             System.out.println("invalid access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid access token");
