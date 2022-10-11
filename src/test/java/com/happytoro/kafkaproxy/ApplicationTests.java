@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-@SpringBootTest(classes=KafkaproxyApplicationTests.class)
+@SpringBootTest(classes=ApplicationTests.class)
 @RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-class KafkaproxyApplicationTests {
+class ApplicationTests {
 	@Test
 	void contextLoads() {
 	}
