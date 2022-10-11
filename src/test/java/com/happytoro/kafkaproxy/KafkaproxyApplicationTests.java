@@ -6,13 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.TestPropertySource;
-//import org.springframework.test.context.ContextConfiguration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes=KafkaproxyApplicationTests.class)
 @RunWith(SpringRunner.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-//@ContextConfiguration(locations = "classpath:test-app-context.xml")
 class KafkaproxyApplicationTests {
 	@Test
 	void contextLoads() {
