@@ -56,3 +56,5 @@ curl -X GET http://localhost:8080/price/1
 ./mvnw spring-boot:run
 #### to install
 ./mvnw clean install
+### to test
+./mvnw test
