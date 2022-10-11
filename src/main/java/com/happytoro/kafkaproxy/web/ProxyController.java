@@ -37,8 +37,8 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/")
 public class ProxyController {
-	@Value("${spring.application.name}")
-	String appName;
+	  @Value("${spring.application.name}")
+	  String appName;
 
     Logger logger = LogManager.getLogger(RestController.class);
     private ApplicationContext context;
@@ -50,7 +50,7 @@ public class ProxyController {
     private OpenOrderService openOrderService;
 
     @Autowired
-	private HttpServletRequest request;
+	  private HttpServletRequest request;
 
     @Autowired
     WebClient createWebClient;
@@ -80,7 +80,7 @@ public class ProxyController {
           ResponseEntity<String> strResp = resp1.block();
           // print the whole response entity
           System.out.println(strResp);
-          
+
           String respBody = strResp.getBody();
           System.out.println(respBody);
           ResponseEntity<PayloadJWT> pJwtResp = resp2.block();
