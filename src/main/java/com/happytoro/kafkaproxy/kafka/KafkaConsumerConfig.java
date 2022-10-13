@@ -20,7 +20,7 @@ public class KafkaConsumerConfig {
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory()
-	{	
+	{
 		// Creating a Map of string-object pairs
 		Map<String, Object> config = new HashMap<>();
 
