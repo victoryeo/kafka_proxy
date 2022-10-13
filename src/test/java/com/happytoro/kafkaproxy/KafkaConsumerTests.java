@@ -13,10 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.happytoro.kafkaproxy.Config.KafkaProducer;
 import com.happytoro.kafkaproxy.kafka.KafkaConsumer;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
