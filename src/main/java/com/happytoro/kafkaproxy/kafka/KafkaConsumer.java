@@ -70,7 +70,7 @@ public class KafkaConsumer {
       firebaseService.sendNotification(title, msg, deviceToken);
   }
 
-	@KafkaListener(topics = "TokenTrade", groupId = "myGroup")
+	@KafkaListener(topics = "#{'${message.topic.consumer_name}'}", groupId = "myGroup")
 	public void consume(String message) throws Exception {
     MessageProducer producer = this.context.getBean(MessageProducer.class);
     logger.info(String.format("Trade received: %s ", message ));
