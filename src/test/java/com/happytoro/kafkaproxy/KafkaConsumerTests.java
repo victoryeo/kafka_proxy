@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9093", "port=9093" })
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class KafkaConsumerTests {
 
