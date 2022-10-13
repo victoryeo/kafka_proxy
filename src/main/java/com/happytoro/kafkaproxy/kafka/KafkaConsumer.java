@@ -1,11 +1,7 @@
 package com.happytoro.kafkaproxy.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-
-import java.text.Format;
-import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,25 +41,11 @@ public class KafkaConsumer {
 
   @Value(value = "${fcm.device.token}")
   private String deviceToken;
-
-  private CountDownLatch latch = new CountDownLatch(1);
   
   private String payload;
 
-  public CountDownLatch getLatch() {
-    return latch;
-  }
-
-  public void setLatch() {
-    latch.countDown();
-  }
-
   public String getPayload() {
     return payload;
-  }
-
-  public void resetLatch() {
-    latch = new CountDownLatch(1);
   }
 
   public void setPayload(String payload) {
