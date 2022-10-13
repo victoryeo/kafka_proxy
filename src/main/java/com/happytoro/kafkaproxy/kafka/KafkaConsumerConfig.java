@@ -33,7 +33,6 @@ public class KafkaConsumerConfig {
 		config.put(
 			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
 			StringDeserializer.class);
-		config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
 		return new DefaultKafkaConsumerFactory<>(config);
 	}
@@ -53,7 +52,6 @@ public class KafkaConsumerConfig {
 		config.put(
 			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
 			"org.springframework.kafka.support.serializer.JsonDeserializer");
-		config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
 		return new DefaultKafkaConsumerFactory<>(config);
 	}
