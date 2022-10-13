@@ -37,8 +37,12 @@ public class KafkaConsumerTests {
 
     @Test
     public void test_ReceiveKafkaEvent() throws Exception{
-        producer.send(TEST_TOPIC, "{\"tradeID\":2,\"takerOrderID\":\"1665636557979\u0026uid1\",\"makerOrderID\":\"1665636543527\u0026uid1\",\"tokenType\":\"stock\",\"tokenName\":\"AAPL\",\"price\":100,\"quantity\":1,\"timestamp\":\"2022-10-13T12:49:33.21426+08:00\"}");
+        String message = "{\"tradeID\":2,\"takerOrderID\":\"1665636557979\u0026uid1\",\"makerOrderID\":\"1665636543527\u0026uid1\",\"tokenType\":\"stock\",\"tokenName\":\"AAPL\",\"price\":100,\"quantity\":1,\"timestamp\":\"2022-10-13T12:49:33.21426+08:00\"}";
 
+        producer.send(TEST_TOPIC, message);
+
+        consumer.setPayload(message);
+        consumer.setLatch();
         boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
         assertTrue(messageConsumed);
         System.out.println("payload = " + consumer.getPayload());

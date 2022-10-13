@@ -54,6 +54,10 @@ public class KafkaConsumer {
     return latch;
   }
 
+  public void setLatch() {
+    latch.countDown();
+  }
+
   public String getPayload() {
     return payload;
   }
@@ -62,7 +66,7 @@ public class KafkaConsumer {
     latch = new CountDownLatch(1);
   }
 
-  private void setPayload(String payload) {
+  public void setPayload(String payload) {
     this.payload = payload;
   }
 
@@ -74,10 +78,6 @@ public class KafkaConsumer {
 	public void consume(String message) throws Exception {
     MessageProducer producer = this.context.getBean(MessageProducer.class);
     logger.info(String.format("Trade received: %s ", message ));
-
-    // testing purposes
-    setPayload(message);
-    latch.countDown();
 
     ObjectMapper mapper = new ObjectMapper();
     JsonNode rootNode = mapper.readTree(message);
