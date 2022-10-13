@@ -2,23 +2,30 @@ package com.happytoro.kafkaproxy;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.happytoro.kafkaproxy.Config.KafkaProducer;
 import com.happytoro.kafkaproxy.kafka.KafkaConsumer;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9093", "port=9093" })
-@DirtiesContext(methodMode = MethodMode.BEFORE_METHOD)
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 public class KafkaConsumerTests {
 
     private static final String TEST_TOPIC = "TokenTrade";
@@ -26,11 +33,14 @@ public class KafkaConsumerTests {
     @Autowired
     EmbeddedKafkaBroker embeddedKafkaBroker;
 
-    @Autowired
+    @SpyBean
     private KafkaConsumer consumer;
 
     @Autowired
     private KafkaProducer producer;
+
+    @Captor
+    ArgumentCaptor<String> captor;
 
     @Test
     public void test_ReceiveKafkaEvent() throws Exception{
@@ -38,10 +48,13 @@ public class KafkaConsumerTests {
 
         producer.send(TEST_TOPIC, message);
 
-        consumer.setPayload(message);
+        // consumer.setPayload(message);
+        verify(consumer, timeout(1000).times(1)).consume(captor.capture());
+        String payload = captor.getValue();
 
-        System.out.println("payload = " + consumer.getPayload());
-        assertTrue(consumer.getPayload().contains("tradeID"));
+        System.out.println("payload = " + payload);
+        assertNotNull(payload);
+        assertTrue(payload.contains("tradeID"));
 
     }
 }
