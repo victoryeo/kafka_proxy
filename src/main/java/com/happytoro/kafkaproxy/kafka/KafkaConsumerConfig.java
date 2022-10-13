@@ -20,7 +20,7 @@ public class KafkaConsumerConfig {
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory()
-	{
+	{	
 		// Creating a Map of string-object pairs
 		Map<String, Object> config = new HashMap<>();
 
@@ -33,6 +33,7 @@ public class KafkaConsumerConfig {
 		config.put(
 			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
 			StringDeserializer.class);
+		config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
 		return new DefaultKafkaConsumerFactory<>(config);
 	}
@@ -52,6 +53,7 @@ public class KafkaConsumerConfig {
 		config.put(
 			ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
 			"org.springframework.kafka.support.serializer.JsonDeserializer");
+		config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
 		return new DefaultKafkaConsumerFactory<>(config);
 	}
