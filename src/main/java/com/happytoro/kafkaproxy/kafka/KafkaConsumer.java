@@ -1,10 +1,7 @@
 package com.happytoro.kafkaproxy.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-
-import java.text.Format;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +41,16 @@ public class KafkaConsumer {
 
   @Value(value = "${fcm.device.token}")
   private String deviceToken;
+  
+  private String payload;
+
+  public String getPayload() {
+    return payload;
+  }
+
+  public void setPayload(String payload) {
+    this.payload = payload;
+  }
 
   public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
       firebaseService.sendNotification(title, msg, deviceToken);

@@ -22,7 +22,15 @@ public class FirebaseConfig {
               .builder()
               .setCredentials(googleCredentials)
               .build();
-      FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "token-trading-app");
+
+      FirebaseApp app = null;
+      if(FirebaseApp.getApps().isEmpty()) { 
+                app = FirebaseApp.initializeApp(firebaseOptions, "token-trading-app");
+        }
+        else {
+                app = FirebaseApp.initializeApp(firebaseOptions);
+        }
+      
       return FirebaseMessaging.getInstance(app);
   }
 }
