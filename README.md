@@ -58,3 +58,7 @@ curl -X GET http://localhost:8080/price/1
 ./mvnw clean install
 ### to test
 ./mvnw test
+### to run single test
+./mvnw test -Dtest="KafkaConsumerTests"
+### check dependency version
+./mvnw dependency:tree
