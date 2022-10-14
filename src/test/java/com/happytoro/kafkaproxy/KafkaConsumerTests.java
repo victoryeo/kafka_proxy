@@ -11,7 +11,6 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
-import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.happytoro.kafkaproxy.Config.KafkaProducer;
@@ -24,8 +23,8 @@ import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9093", "port=9093" })
-@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 public class KafkaConsumerTests {
 
     private static final String TEST_TOPIC = "TokenTrade";

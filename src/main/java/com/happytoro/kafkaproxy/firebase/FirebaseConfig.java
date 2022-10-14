@@ -28,7 +28,7 @@ public class FirebaseConfig {
                 app = FirebaseApp.initializeApp(firebaseOptions, "token-trading-app");
         }
         else {
-                app = FirebaseApp.initializeApp(firebaseOptions);
+                app = FirebaseApp.getApps().get(0);
         }
       
       return FirebaseMessaging.getInstance(app);
