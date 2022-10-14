@@ -25,7 +25,7 @@ import com.happytoro.kafkaproxy.web.ProxyController;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-public class ProxyContollerTests {
+public class ProxyControllerTests {
   @Autowired
   private MockMvc mockMvc;
 
