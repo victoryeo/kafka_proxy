@@ -41,16 +41,6 @@ public class KafkaConsumer {
 
   @Value(value = "${fcm.device.token}")
   private String deviceToken;
-  
-  private String payload;
-
-  public String getPayload() {
-    return payload;
-  }
-
-  public void setPayload(String payload) {
-    this.payload = payload;
-  }
 
   public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
       firebaseService.sendNotification(title, msg, deviceToken);
