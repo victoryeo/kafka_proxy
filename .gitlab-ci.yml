@@ -10,6 +10,7 @@ stages:
 run:unit_test:
   stage: run_test
   script:
+    - java --version
     - ./mvnw test
 
 post:unit_test:
