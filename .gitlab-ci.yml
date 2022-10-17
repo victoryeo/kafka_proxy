@@ -1,0 +1,18 @@
+image: openjdk:11     #Defining the Docker Image
+
+variables:
+
+  
+stages:
+  - run_test
+  - post_test
+
+run:unit_test:
+  stage: run_test
+  script:
+    - ./mvnw test
+
+post:unit_test:
+  stage: post_test
+  script:
+    - echo $PWD
