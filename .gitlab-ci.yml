@@ -1,8 +1,5 @@
 image: openjdk:11     #Defining the Docker Image
 
-variables:
-
-
 services:
   - postgres:12.2-alpine
 
@@ -11,7 +8,6 @@ variables:
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "password"
   POSTGRES_HOST_AUTH_METHOD: trust
-  spring.datasource.jdbc-url: "postgres"
   
 stages:
   - run_test
