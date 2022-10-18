@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.happytoro.kafkaproxy.price.model.Price;
 import com.happytoro.kafkaproxy.price.service.PriceService;
+import com.happytoro.kafkaproxy.web.PriceController;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -37,9 +38,13 @@ public class PriceControllerTests {
 
 	@MockBean
 	PriceService priceService;
+	
+	@Autowired
+	private PriceController priceController;
 
 	@Test
 	public void contextLoads() throws Exception {
+		assertThat(priceController).isNotNull();
 		assertThat(priceService).isNotNull();
 	}
 
