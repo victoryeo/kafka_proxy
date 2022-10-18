@@ -1,20 +1,4 @@
 image: openjdk:11     #Defining the Docker Image
-
-services:
-  - name: postgres:12.2-alpine
-    alias: db1
-    variables:
-      POSTGRES_DB: "openOrders"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_HOST_AUTH_METHOD: trust
-  - name: postgres:12.2-alpine
-    alias: db2
-    variables:
-      POSTGRES_DB: "price"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_HOST_AUTH_METHOD: trust
   
 stages:
   - run_test
