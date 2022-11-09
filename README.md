@@ -62,3 +62,10 @@ curl -X GET http://localhost:8080/price/1
 ./mvnw test -Dtest="KafkaConsumerTests"
 ### check dependency version
 ./mvnw dependency:tree
+
+### build an executable jar package
+mvn clean package
+### run using java
+java -jar my-application.jar
+### create .mvn directory with needed jar inside
+./mvn wrapper:wrapper
