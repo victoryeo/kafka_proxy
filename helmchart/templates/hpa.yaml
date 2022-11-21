@@ -1,0 +1,28 @@
+{{- if .Values.kafkaProxy.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "helmchart.fullname" . }}
+  labels:
+    {{- include "helmchart.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "helmchart.fullname" . }}
+  minReplicas: {{ .Values.kafkaProxy.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.kafkaProxy.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.kafkaProxy.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.kafkaProxy.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.kafkaProxy.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.kafkaProxy.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

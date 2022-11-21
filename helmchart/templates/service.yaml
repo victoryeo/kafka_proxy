@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helmchart.fullname" . }}
+  labels:
+    {{- include "helmchart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.kafkaProxy.service.type }}
+  ports:
+    - port: {{ .Values.postgresql.service.port }}
+      targetPort: {{ .Values.postgresql.service.targetPort }}
+      protocol: TCP
+      name: postgresql
+    - port: {{ .Values.zookeeper.service.port }}
+      targetPort: {{ .Values.zookeeper.service.targetPort }}
+      protocol: TCP
+      name: zookeeper
+    - port: {{ .Values.kafka.service.port }}
+      targetPort: {{ .Values.kafka.service.targetPort }}
+      protocol: TCP
+      name: kafka
+    - port: {{ .Values.kafkaProxy.service.port }}
+      targetPort: {{ .Values.kafkaProxy.service.targetPort }}
+      protocol: TCP
+      name: kafka-proxy  
+  selector:
+    {{- include "helmchart.selectorLabels" . | nindent 4 }}
