@@ -24,6 +24,8 @@ import java.util.Map;
 
 import com.happytoro.kafkaproxy.web.ProxyController;
 
+import scala.annotation.meta.param;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -76,7 +78,7 @@ public class ProxyControllerTests {
 		String requestJson=ow.writeValueAsString(body);
 
 		MvcResult result = mockMvc.perform(
-			post("/api/order")
+			post("http://localhost:4002/api/order?tokenUserServiceUrl=test")
 		 .contentType(MediaType.APPLICATION_JSON)
 		 .content(requestJson))
 		 .andReturn();
@@ -84,7 +86,7 @@ public class ProxyControllerTests {
 		System.out.println("contentP "+contentP);
 
 		mockMvc.perform(
-			post("/api/order")
+			post("http://localhost:4002/api/order?tokenUserServiceUrl=test")
 		 .contentType(MediaType.APPLICATION_JSON)
 		 .content(requestJson))
 		 .andExpect(status().isBadRequest())

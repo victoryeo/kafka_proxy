@@ -36,7 +36,8 @@ curl -X POST -H "Content-Type: application/json" -X POST -d '{"orderID":"2", "to
 
 With access token 
 ````
-curl -X POST -H "Content-Type: application/json" -H "Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4iLCJpYXQiOjE2NjUwMjA3OTYsImV4cCI6MTY2NTAyNDM5Nn0.iM5bea67KAE3WHHN-mNpip4ETKVeEbVYvMiEoZ6vA7c" -X POST -d '{"orderID":"3049", "tokenType":"bond", "tokenName":"AAPLE","orderType":0,"price":10, "quantity":60}' http://localhost:8081/api/order
+curl -X POST -H "Content-Type: application/json" -H "Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImlhZmdhYWxkYmZAZ21haWwuY29tIiwiaWF0IjoxNjY5MTc5MzUzLCJleHAiOjE2NjkxODI5NTN9.o2Ni8iF53qlbHTgVXdjaiHNKRECf_fu-Mn0L62kxKgw" -X POST -d '{"orderID":"3049", "tokenType":"bond", "tokenName":"AAPL","orderType":0,"price":10, "quantity":60}' 'http://localhost:8082/api/order?tokenUserServiceUrl=http://localhost:4001/userservice/validatetoken'
+
 ````
 
 Get price list of all tokens
