@@ -73,7 +73,7 @@ public class ProxyController {
 
           ResponseSpec respSpec = createWebClient.post()
                   // .uri("/userservice/validatetoken")
-                  .uri(tokenUserServiceUrl)
+                  .uri(tokenUserServiceUrl+"/userservice/validatetoken")
                   .body(BodyInserters.fromValue(bodyMap))
                   .retrieve();
                   
