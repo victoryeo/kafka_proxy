@@ -23,6 +23,7 @@ function create_user_and_database_and_initdata() {
 			CREATE TABLE "price" (id serial PRIMARY KEY, price real, timeoftrade VARCHAR (255), tokenname VARCHAR (255), tokentype VARCHAR (255));
 			INSERT INTO "price" (id, price, timeoftrade, tokenname, tokentype) VALUES (1, 1.1, '2022-11-04T10:14:03.045657921+08:00', 'JOU', 'Stock');
 			INSERT INTO "price" (id, price, timeoftrade, tokenname, tokentype) VALUES (2, 1.4, '2022-11-04T10:14:03.045657921+08:00', 'AAPL', 'Stock');
+			COPY price FROM '/seed.csv' csv header;
 EOSQL
 }
 
