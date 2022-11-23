@@ -5,6 +5,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,15 +63,17 @@ public class ProxyController {
     }
 
     @PostMapping("/order")
-    public ResponseEntity<String> createOrder(@RequestBody Order order) throws Exception {
+    public ResponseEntity<String> createOrder(@RequestBody Order order,@RequestParam("tokenUserServiceUrl") String tokenUserServiceUrl) throws Exception {
         Map<String, String> bodyMap = new HashMap();
         String accessToken = request.getHeader("Access-Token");
         if (accessToken != null ) {
           System.out.println(accessToken);
+          System.out.println(tokenUserServiceUrl);
           bodyMap.put("access_token", accessToken);
 
           ResponseSpec respSpec = createWebClient.post()
-                  .uri("/userservice/validatetoken")
+                  // .uri("/userservice/validatetoken")
+                  .uri(tokenUserServiceUrl+"/userservice/validatetoken")
                   .body(BodyInserters.fromValue(bodyMap))
                   .retrieve();
                   

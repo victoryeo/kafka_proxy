@@ -14,7 +14,7 @@ public class WebClientConfig {
     
     @Bean
     public WebClient createWebClient() {
-        return WebClient.builder().baseUrl("http://localhost:" + tokenUserServicePortNumber)
+        return WebClient.builder().baseUrl("")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE,
                         MediaType.APPLICATION_JSON_VALUE)
                 .build();
