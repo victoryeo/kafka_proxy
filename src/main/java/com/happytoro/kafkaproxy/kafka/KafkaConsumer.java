@@ -43,7 +43,8 @@ public class KafkaConsumer {
   private String deviceToken;
 
   public void sendPushMessage(String title, String msg) throws FirebaseMessagingException {
-      firebaseService.sendNotification(title, msg, deviceToken);
+    System.out.println(title+" "+msg+" "+ deviceToken+" end");
+    firebaseService.sendNotification(title, msg, deviceToken);
   }
 
 	@KafkaListener(topics = "#{'${message.topic.consumer_name}'}", groupId = "myGroup")
