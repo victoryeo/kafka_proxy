@@ -6,10 +6,11 @@ replicaCount: 2
 
 kafkaProxy:
   image:
-    repository: zihangg/kafka-proxy
+    registry: docker.io
+    repository: victoryeo00/kafka-proxy
     pullPolicy: Always
     # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
+    tag: 3
 
   imagePullSecrets: []
   nameOverride: ""
@@ -84,8 +85,8 @@ kafkaProxy:
 postgresql:
   image:
     registry: docker.io
-    repository: zihangg/multiple-pg-db
-    tag: latest
+    repository: victoryeo00/multiple-pg-db
+    tag: 12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
