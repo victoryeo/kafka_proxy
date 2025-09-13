@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import com.happytoro.kafkaproxy.model.OrderItem;
+import com.happytoro.kafkaproxy.model.TradeMatch;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -37,20 +40,34 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, Object> producerOrderFactory() {
-        System.out.println("call producerFactory");
+    public ProducerFactory<String, OrderItem> orderProducerFactory() {
+        System.out.println("call orderProducerFactory");
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        configProps.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG, "20971520");
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.springframework.kafka.support.serializer.JsonSerializer");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+    
+    @Bean
+    public KafkaTemplate<String, OrderItem> orderKafkaTemplate() {
+        System.out.println("call orderKafkaTemplate");
+        return new KafkaTemplate<>(orderProducerFactory());
+    }
 
+    @Bean
+    public ProducerFactory<String, TradeMatch> tradeProducerFactory() {
+        System.out.println("call tradeProducerFactory");
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaOrderTemplate() {
-        System.out.println("call kafkaTemplate");
-        return new KafkaTemplate<String, Object>(producerOrderFactory());
+    public KafkaTemplate<String, TradeMatch> tradeKafkaTemplate() {
+        System.out.println("call tradeKafkaTemplate");
+        return new KafkaTemplate<>(tradeProducerFactory());
     }
 }
