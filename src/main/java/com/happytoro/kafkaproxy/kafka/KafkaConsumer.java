@@ -52,99 +52,104 @@ public class KafkaConsumer {
     MessageProducer producer = this.context.getBean(MessageProducer.class);
     logger.info(String.format("Trade received: %s ", message ));
 
-    ObjectMapper mapper = new ObjectMapper();
-    JsonNode rootNode = mapper.readTree(message);
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode rootNode = mapper.readTree(message);
 
-    String timestampTrade = rootNode.get("timestamp").asText();
-    Price price = new Price(
-      rootNode.get("tokenType").asText(),
-      rootNode.get("tokenName").asText(), 
-      Float.parseFloat(rootNode.get("price").asText()),
-      timestampTrade);
-    Price savedPrice = priceService.savePrice(price);
-    System.out.println(savedPrice);
+      String timestampTrade = rootNode.get("timestamp").asText();
+      Price price = new Price(
+        rootNode.get("tokenType").asText(),
+        rootNode.get("tokenName").asText(), 
+        Float.parseFloat(rootNode.get("price").asText()),
+        timestampTrade);
+      Price savedPrice = priceService.savePrice(price);
+      System.out.println(savedPrice);
 
-    String makerOrderID = rootNode.get("makerOrderID").asText();
-    String takerOrderID = rootNode.get("takerOrderID").asText();
-    Integer makerOrderType = 99;
-    Integer takerOrderType = 99;
-    if (makerOrderID.equals(takerOrderID)) {
-      logger.info("makerOrderID is same as takerOrderID!");
-    }
-    else {
-      makerOrderType = openOrderService.getOrderType(makerOrderID);
-      takerOrderType = openOrderService.getOrderType(takerOrderID);
-      openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
-    }
-
-    // if there's an orderID, send notification to device based on orderStatus
-    // from orderId, get from DB
-    // if exists, calculate percentage and send notification
-    // if not exist, 100% completion 
-
-    if (!makerOrderID.isEmpty()) {
-      String makerUID = "1";
-      if (makerOrderID.contains("&uid")) {
-        makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
-      }
-      Double completion = openOrderService.getOrderCompletion(makerOrderID);
-      String orderQuantity;
-      if (makerOrderType == 0) {
-        orderQuantity = String.valueOf(rootNode.get("quantity").asInt() * -1);
+      String makerOrderID = rootNode.get("makerOrderID").asText();
+      String takerOrderID = rootNode.get("takerOrderID").asText();
+      Integer makerOrderType = 99;
+      Integer takerOrderType = 99;
+      if (makerOrderID.equals(takerOrderID)) {
+        logger.info("makerOrderID is same as takerOrderID!");
       }
       else {
-        orderQuantity = rootNode.get("quantity").asText();
+        makerOrderType = openOrderService.getOrderType(makerOrderID);
+        takerOrderType = openOrderService.getOrderType(takerOrderID);
+        openOrderService.updateOpenOrder(rootNode.get("makerOrderID").asText(), rootNode.get("takerOrderID").asText(), rootNode.get("quantity").asDouble());
       }
-      String toSent = "{"
-        + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
-        + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
-        + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
-        + "\"price\":" + rootNode.get("price").asText()  + ","
-        + "\"quantity\":" + rootNode.get("quantity").asText()  + ","
-        + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
-        + "}";
-      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
 
-      TradeMatch tm = new TradeMatch(makerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
-      rootNode.get("tokenType").asText(),
-      rootNode.get("tokenName").asText(),
-      Float.parseFloat(rootNode.get("price").asText()),
-      Float.parseFloat(orderQuantity), timestampTrade);
-    
-      producer.sendTradeMessage(tm);
-    }
+      // if there's an orderID, send notification to device based on orderStatus
+      // from orderId, get from DB
+      // if exists, calculate percentage and send notification
+      // if not exist, 100% completion 
 
-    if (!takerOrderID.isEmpty()) {
-      String takerUID = "1";
-      if (takerOrderID.contains("&uid")) {
-        takerUID = takerOrderID.substring(takerOrderID.lastIndexOf("&uid") + 4);
-      }
-      Double completion = openOrderService.getOrderCompletion(takerOrderID);
-      String orderQuantity;
-      if (takerOrderType == 0) {
-        orderQuantity = String.valueOf(rootNode.get("quantity").asDouble() * -1);
-      }
-      else {
-        orderQuantity = rootNode.get("quantity").asText();
-      }
-      String toSent = "{"
-        + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
-        + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
-        + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
-        + "\"price\":" + rootNode.get("price").asText() + ","
-        + "\"quantity\":" + orderQuantity + ","
-        + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
-        + "}";
-      logger.info(toSent); 
-      sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
+      if (!makerOrderID.isEmpty()) {
+        String makerUID = "1";
+        if (makerOrderID.contains("&uid")) {
+          makerUID = makerOrderID.substring(makerOrderID.lastIndexOf("&uid") + 4);
+        }
+        Double completion = openOrderService.getOrderCompletion(makerOrderID);
+        String orderQuantity;
+        if (makerOrderType == 0) {
+          orderQuantity = String.valueOf(rootNode.get("quantity").asInt() * -1);
+        }
+        else {
+          orderQuantity = rootNode.get("quantity").asText();
+        }
+        String toSent = "{"
+          + "\"orderID\":" + "\"" + rootNode.get("makerOrderID").asText() + "\","
+          + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
+          + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
+          + "\"price\":" + rootNode.get("price").asText()  + ","
+          + "\"quantity\":" + rootNode.get("quantity").asText()  + ","
+          + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
+          + "}";
+        sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
 
-      TradeMatch tm = new TradeMatch(takerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
-      rootNode.get("tokenType").asText(),
-      rootNode.get("tokenName").asText(),
-      Float.parseFloat(rootNode.get("price").asText()),
-      Float.parseFloat(orderQuantity), timestampTrade);
-    
-      producer.sendTradeMessage(tm);
+        TradeMatch tm = new TradeMatch(makerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+        rootNode.get("tokenType").asText(),
+        rootNode.get("tokenName").asText(),
+        Float.parseFloat(rootNode.get("price").asText()),
+        Float.parseFloat(orderQuantity), timestampTrade);
+      
+        producer.sendTradeMessage(tm);
+      }
+
+      if (!takerOrderID.isEmpty()) {
+        String takerUID = "1";
+        if (takerOrderID.contains("&uid")) {
+          takerUID = takerOrderID.substring(takerOrderID.lastIndexOf("&uid") + 4);
+        }
+        Double completion = openOrderService.getOrderCompletion(takerOrderID);
+        String orderQuantity;
+        if (takerOrderType == 0) {
+          orderQuantity = String.valueOf(rootNode.get("quantity").asDouble() * -1);
+        }
+        else {
+          orderQuantity = rootNode.get("quantity").asText();
+        }
+        String toSent = "{"
+          + "\"orderID\":" + "\"" + rootNode.get("takerOrderID").asText() + "\","
+          + "\"tokenType\":" + "\"" + rootNode.get("tokenType").asText() + "\","
+          + "\"tokenName\":" + "\"" + rootNode.get("tokenName").asText() + "\","
+          + "\"price\":" + rootNode.get("price").asText() + ","
+          + "\"quantity\":" + orderQuantity + ","
+          + "\"timestamp\":" + "\"" + rootNode.get("timestamp").asText() + "\""
+          + "}";
+        logger.info(toSent); 
+        sendPushMessage(String.format("Trade %s%% matched", completion), toSent);
+
+        TradeMatch tm = new TradeMatch(takerUID, rootNode.get("tradeID").asInt(), takerOrderID, makerOrderID,
+        rootNode.get("tokenType").asText(),
+        rootNode.get("tokenName").asText(),
+        Float.parseFloat(rootNode.get("price").asText()),
+        Float.parseFloat(orderQuantity), timestampTrade);
+      
+        producer.sendTradeMessage(tm);
+      }
+
+    } catch (Exception e) {
+      logger.error("Error processing trade: " + e.getMessage());
     }
 	}
 }
